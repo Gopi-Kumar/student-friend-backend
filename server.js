@@ -28,7 +28,29 @@ app.post("/login/:username/:password", async (req,res)=>{
     
 })
 
-app.post("/upload", (req,res)=>{
+
+    
+app.post("/upload/:username/:password/:webbooks/:todos/:alarms/:routine/:notes",  async (req,res)=> {
+    let {username, password, webbooks, todos, alarms, routine, notes} = req.params;
+    let data = await findOne({username : username, password : password});
+    if(data){
+        await Student.updateOne({username : username, password : password},{
+            todos,
+            webbooks,
+            alarms,
+            routine,
+            notes,
+        }, function(err, numberAffected, rawResponse){
+            if(err){
+                res.json({message : err})
+            }else{
+                res.json({message : "Uploaded"})
+            }
+        })
+
+    }else{
+        res.json({message : "User not found"});
+    }
 
 })
 
@@ -42,7 +64,7 @@ app.post("/newuser/:username/:password", async (req,res)=>{
             username, 
             password
         })
-        await student.save().then(data=>{
+        await student.save().then( data => {
             res.json(data);
         }).catch(err => {
             res.json({message : err});
@@ -50,10 +72,6 @@ app.post("/newuser/:username/:password", async (req,res)=>{
     }else{
         res.json({message : "Username or Password already taken."});
     }
-
-    
-
-
 })
 
 //listening

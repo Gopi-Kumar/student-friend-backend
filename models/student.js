@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 const studentSchema = new Schema({
     username : {type : String},
     password : {type : String},
-    todo : {type : Array},
-    alarm : {type : Array},
+    todos : {type : Array},
+    alarms : {type : Array},
     routine : {type : Array},
-    webbook : {type : Array},
+    webbooks : {type : Array},
     notes : {type: Array}
 
     

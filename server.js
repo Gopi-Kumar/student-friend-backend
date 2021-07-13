@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = 3001;
 const connectDB = require("./configs/db")
@@ -13,18 +14,20 @@ connectDB();
 app.use(express.urlencoded({extended : true}));
 
 app.use(express.json());
-
+app.use(cors());
 //routes
 app.post("/login/:username/:password", async (req,res)=>{
     let username = req.params.username,
     password = req.params.password;
-    console.log(username, password)
-    let data = await Student.findOne({username : username, password  :password});
-    if(data){
-        res.json(JSON.parse(data));
-    }else{
-        res.json({message : "user not found"})
-    }
+    await Student.findOne({username : username, password  :password}).then(data => {
+        if(data){
+            res.json(data);
+        }else{
+            res.json({message : "Wrong credential!"})
+        }
+    }).catch(err => {
+        res.json({message : err});
+    })
     
 })
 
@@ -32,26 +35,21 @@ app.post("/login/:username/:password", async (req,res)=>{
     
 app.post("/upload/:username/:password/:webbooks/:todos/:alarms/:routine/:notes",  async (req,res)=> {
     let {username, password, webbooks, todos, alarms, routine, notes} = req.params;
-    let data = await findOne({username : username, password : password});
-    if(data){
+    await findOne({username : username, password : password}).then(async (data) =>{
         await Student.updateOne({username : username, password : password},{
             todos,
             webbooks,
             alarms,
             routine,
             notes,
-        }, function(err, numberAffected, rawResponse){
-            if(err){
-                res.json({message : err})
-            }else{
-                res.json({message : "Uploaded"})
-            }
+        }).then(data => {
+            res.json({message : "Uploaded"})
+        }).catch(err => {
+            res.json({message : err});
         })
-
-    }else{
-        res.json({message : "User not found"});
-    }
-
+    }).catch(err => {
+        res.json({message : "err"});
+    })
 })
 
 app.post("/newuser/:username/:password", async (req,res)=>{

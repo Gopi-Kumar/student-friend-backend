@@ -15,7 +15,12 @@ connectDB();
 
 
 app.use(cors());
+app.use(express.static(__dirname));
 //routes
+
+app.get("/", (req,res)=>{
+    res.sendFile(__dirname + '/views/index.html');
+});
 app.post("/login/:username/:password", async (req,res)=>{
     let username = req.params.username,
     password = req.params.password;

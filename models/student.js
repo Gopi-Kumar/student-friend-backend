@@ -4,10 +4,10 @@ const studentSchema = new Schema({
     username : {type : String},
     password : {type : String},
     todos : {type : Array},
-    alarms : {type : Array},
-    routine : {type : Array},
-    webbooks : {type : Array},
-    notes : {type: Array}
+    alarms : {type : String},
+    routine : {type : String},
+    webpage : {type : String},
+    notes : {type: String}
 
     
 }, {timestamps : true});
